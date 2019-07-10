@@ -1,16 +1,52 @@
 const Main = require('../main');
 
-// const isStartSmallerThanOrEqualToEnd = Main.isStartSmallerThanOrEqualToEnd;
-//
-// const isNumbersInRangeOf1To1000 = Main.isNumbersInRangeOf1To1000
-//
-// const createMultiplicationTable = Main.createMultiplicationTable;
-//
-// // test for function isStartSmallerThanOrEqualToEnd
-//
-// it ('should return multiplication table when start number and end number given 2 and 4', () => {
-//     let result = '2*2=4  \n' +
-//         '3*2=6  3*3=9  \n' +
-//         '4*2=8  4*3=12  4*4=16  \n';
-//     expect(createMultiplicationTable(2, 4)).toBe(result);
+const renderReceipt = Main.renderReceipt;
+const handleBarcodesToItemMap = Main.handleBarcodesToItemMap;
+const handleMapToItemList = Main.handleMapToItemList;
+
+
+// test for function isStartSmallerThanOrEqualToEnd
+
+it ('should return receipt when given barcodes', () => {
+    let barcodes = ['0001', '0003', '0005', '0003'];
+    let result = `Receipts
+    ------------------------------------------------------------
+    Coca Cola 3 1
+    Pepsi-Cola 5 2
+    Dr Pepper 7 1
+    
+    ------------------------------------------------------------
+    Price: 20`;
+    expect(renderReceipt(barcodes)).toBe(result);
+});
+
+// ok
+
+// it ('should return barcodesMap when given barcodes', () => {
+//     let barcodes = ['0001', '0003', '0005', '0003'];
+//     let resultMap = new Map();
+//     resultMap.set("0001", 1);
+//     resultMap.set("0003", 2);
+//     resultMap.set("0005", 1);
+//     let result = JSON.stringify(resultMap);
+//     expect(JSON.stringify(handleBarcodesToItemMap(barcodes))).toBe(result);
 // });
+
+// OK
+
+// it ('should return barcodesList when given barcodeMap', () => {
+//     let resultMap = new Map();
+//     resultMap.set("0001", 1);
+//     resultMap.set("0003", 2);
+//     resultMap.set("0005", 1);
+//     let result = [
+//         {"name":"Coca Cola","price": 3,"count": 1}, 
+//         {"name":"Pepsi-Cola","price": 5,"count": 2},
+//         {"name": "Dr Pepper","price": 7,"count": 1}
+//     ];
+//     expect(JSON.stringify(handleMapToItemList(resultMap))).toBe(JSON.stringify(result));
+// });
+
+
+
+

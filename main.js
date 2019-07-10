@@ -1,5 +1,5 @@
-function loadAllItems () {
-    let itemList = [
+const loadAllItems = () => {
+    const itemList = [
         {"id": "0001", "name" : "Coca Cola", "price": 3},
         {"id": "0002", "name" : "Diet Coke", "price": 4},
         {"id": "0003", "name" : "Pepsi-Cola", "price": 5},
@@ -14,61 +14,76 @@ function loadAllItems () {
     return itemList;
 }
 
-function createReceipt (barcodes) {
-    let itemList = loadAllItems();
-    let receiptItems = [];
+const handleBarcodesToItemMap = (barcodes) => {
     // 处理数量
     let barcodeMap = new Map();
     barcodes.forEach(barcode => {
         let count = (barcodeMap.get(barcode) == undefined) ? 1 : barcodeMap.get(barcode) + 1;
         barcodeMap.set(barcode, count);
     });
+    return barcodeMap;
+}
 
-    barcodeMap.forEach((id, count) => {
+const handleMapToItemList = (barcodeMap) => {
+    let receiptItems = [];
+    let itemList = loadAllItems();
+
+    barcodeMap.forEach((val, key) => {
         let filterItem = itemList.filter(value => {
-            return value.id == id;
+            return value.id == key;
         });
         let receiptObj = {
             name: filterItem[0].name,
             price: filterItem[0].price,
-            count: count
+            count: val
         };
         receiptItems.push(receiptObj);
     });
-
-    //
-    // if (barcodes.length > 0) {
-    //     let itemList = loadAllItems();
-    //     let receiptItems = [];
-    //     let itemMap = new Map();
-    //     barcodes.forEach(barcode => {
-    //         let filterItem = itemList.filter(value => {
-    //             return value.id == barcode;
-    //         });
-    //         let count = (itemMap.get(barcode) == undefined) ? 1 : itemMap.get(barcode) + 1;
-    //         itemMap.set(barcode, count);
-    //         let receiptObj = {
-    //             name: filterItem[0].name,
-    //             price: filterItem[0].price,
-    //             count: 1 // default value
-    //         };
-    //     });
-    // } else {
-    //     return 1 / 0;
-    // }
+    return receiptItems;
 }
 
-function printReceipt (barcodes) {
-    try {
-        let result = createReceipt(barcodes);
-        console.log(result);
-
-    } catch (e) {
-        console.log('[ERROR:]' + e)
-    }
+const renderItems = (receiptItemList) => {
+    let itemDetails = ``;
+    receiptItemList.forEach(val => itemDetails += val.name + ` ` + val.price +` ` + val.count + `
+    `);
+    return itemDetails;
 }
 
+const calculateTotalPrice = (receiptItemList) => {
+    let totalPrice = 0;
+    receiptItemList.forEach(item => totalPrice += item.price * item.count);
+    return totalPrice;
+
+}
+
+const renderTotal = (totalPrice) => {
+    return `Price: ` + totalPrice;
+}
+
+const renderReceipt = (barcodes) => {
+    let barcodeMap = handleBarcodesToItemMap(barcodes);
+    let receiptItemList = handleMapToItemList(barcodeMap);
+    let itemDetails = renderItems(receiptItemList);
+    let totalPrice = calculateTotalPrice(receiptItemList);
+    let totalDetails = renderTotal(totalPrice);
+    let receiptTemplate = `Receipts
+    ------------------------------------------------------------
+    `;
+    receiptTemplate += itemDetails;
+    receiptTemplate += `
+    ------------------------------------------------------------
+    `;
+    receiptTemplate += totalDetails;
+    return receiptTemplate;
+}
+
+const printReceipt = (barcodes) => {
+    let result = (barcodes.length > 0) ? renderReceipt(barcodes) : '[ERROR:]';
+    return result;
+}
 
 module.exports = {
-    createRecipt
+    renderReceipt,
+    handleBarcodesToItemMap,
+    handleMapToItemList
 };
